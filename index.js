@@ -1,11 +1,17 @@
-const fs = require('fs');
+const { readFile } = require("fs");
+const express = require('express');
+const app = express();
 
-fs.readFile('./files/starter.txt', (err, data) => {
-    if (err) throw err;
-    console.log(data.toString());
+app.get('/', (request, response) => {
+
+    readFile('./home.html', 'utf8', (err, html) => {
+        if (err) {
+            response.status(500).send('sorry, put of order');
+        }
+
+        response.send(html);
+    })
+
 });
 
-process.on('./files/hello.txt', err => {
-    console.error(`There was an uncaught error: ${err}`);
-    process.exit(1);
-});
+app.listen(process.env.PORT || 3000, () => console.log(`App available on http://localhost:3000`));
